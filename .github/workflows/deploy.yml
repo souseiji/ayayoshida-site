@@ -20,22 +20,30 @@ jobs:
       - name: Build
         run: hugo --minify
 
-      - name: Checkout target repo
+      - name: Checkout target repo (main)
         uses: actions/checkout@v4
         with:
           repository: ayayoshida03/ayayoshida03.github.io
           token: ${{ secrets.DEPLOY_TOKEN }}
           path: target
 
-      - name: Sync built site into target repo
-        run: rsync -a --delete --exclude='.git' public/ target/
-
-      - name: Commit and push branch
+      - name: Update staging preview (direct push, no PR)
         working-directory: target
         run: |
+          rm -rf staging
+          mkdir -p staging
+          cp -r ../public/. staging/
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -B auto-deploy
+          git add staging
+          git diff --cached --quiet || git commit -m "Update staging preview [skip ci]"
+          git push origin main
+
+      - name: Sync built site into production branch
+        working-directory: target
+        run: |
+          git checkout -B auto-deploy origin/main
+          rsync -a --delete --exclude='.git' --exclude='staging' ../public/ .
           git add -A
           if git diff --cached --quiet; then
             echo "changed=false" >> "$GITHUB_ENV"
@@ -57,5 +65,5 @@ jobs:
             gh pr create --repo ayayoshida03/ayayoshida03.github.io \
               --head auto-deploy --base main \
               --title "サイト更新 ($(date +'%Y-%m-%d %H:%M'))" \
-              --body "ayayoshida-site の main ブランチ (${{ github.sha }}) から自動生成されたビルド差分です。"
+              --body "ayayoshida-site の main ブランチ (${{ github.sha }}) から自動生成されたビルド差分です。staging/ は含まれません（本番ルート直下のみが対象）。"
           fi
