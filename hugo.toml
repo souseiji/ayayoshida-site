@@ -1,0 +1,8 @@
+baseURL = 'https://ayayoshida03.github.io/'
+locale = 'ja'
+title = '吉田あや公式サイト'
+theme = ''
+enableRobotsTXT = true
+
+[params]
+  description = "吉田あや（よしだ あや）公式サイト。特別支援教育の現場経験と、ダウン症のある子どもを育てる当事者の視点から、誰も取り残さない社会をめざします。"
