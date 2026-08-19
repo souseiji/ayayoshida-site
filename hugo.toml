@@ -1,7 +1,6 @@
 baseURL = 'https://ayayoshida03.github.io/'
 locale = 'ja'
 title = '吉田あや公式サイト'
-theme = ''
 enableRobotsTXT = true
 
 [params]
