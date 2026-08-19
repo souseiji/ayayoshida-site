@@ -6,7 +6,18 @@
   <title>{{ .Site.Title }}</title>
   <meta name="description" content="{{ .Site.Params.description }}">
   <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
-  <link rel="icon" href="data:,">
+  <link rel="icon" href="{{ "favicon.ico" | relURL }}">
+  <link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ .Site.Title }}">
+  <meta property="og:description" content="{{ .Site.Params.description }}">
+  <meta property="og:image" content="{{ "images/hero-banner.jpg" | absURL }}">
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ .Site.Title }}">
+  <meta name="twitter:description" content="{{ .Site.Params.description }}">
+  <meta name="twitter:image" content="{{ "images/hero-banner.jpg" | absURL }}">
 </head>
 <body>
   {{ $site := hugo.Data.site }}
@@ -19,7 +30,7 @@
         <a href="#policies">政策</a>
         <a href="#profile">プロフィール</a>
         <a href="#news">活動報告</a>
-        <a href="#support">応援する</a>
+        <a class="nav-cta" href="#support">応援する</a>
         <a href="#faq">よくある質問</a>
         <a href="#contact">お問い合わせ</a>
       </nav>
@@ -28,24 +39,46 @@
 
   <main id="top">
     <section class="hero">
-      <div class="hero-inner">
-        <p class="hero-name_en">{{ $site.hero.name_en }}</p>
-        <h1 class="hero-catch">{{ $site.hero.catch }}</h1>
-        <p class="hero-sub">{{ $site.hero.sub }}</p>
-        <div class="hero-cta">
-          <a class="btn btn-primary" href="{{ $site.hero.cta_primary_href }}">{{ $site.hero.cta_primary }}</a>
-          <a class="btn btn-secondary" href="{{ $site.hero.cta_secondary_href }}">{{ $site.hero.cta_secondary }}</a>
+      <div class="hero-viewport">
+        <div class="hero-bg">
+          <img src="{{ "images/hero-banner.jpg" | relURL }}" alt="{{ $site.hero.name }}">
+        </div>
+        <div class="hero-inner">
+          <div class="hero-text">
+            <p class="hero-name_en">{{ $site.hero.name_en }}</p>
+            <h1 class="hero-catch">{{ $site.hero.catch | safeHTML }}</h1>
+            <p class="hero-sub">{{ $site.hero.sub }}</p>
+            <div class="hero-cta">
+              <a class="btn btn-primary" href="{{ $site.hero.cta_primary_href }}">{{ $site.hero.cta_primary }}</a>
+              <a class="btn btn-secondary" href="{{ $site.hero.cta_secondary_href }}">{{ $site.hero.cta_secondary }}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="badge-strip">
+        <div class="badge-strip-inner">
+          {{ range $site.hero.badges }}
+          <div class="badge">
+            <p class="badge-text">{{ .text }}</p>
+            <p class="badge-sub">{{ .sub }}</p>
+          </div>
+          {{ end }}
         </div>
       </div>
     </section>
 
     <section id="message" class="message">
-      <div class="section-inner narrow">
+      <div class="section-inner">
         <h2>{{ $site.message.heading }}</h2>
-        <div class="message-body">
-          {{ range split $site.message.body "\n\n" }}
-          <p>{{ . }}</p>
-          {{ end }}
+        <div class="message-layout">
+          <div class="message-photo">
+            <img src="{{ "images/message-portrait.jpg" | relURL }}" alt="{{ $site.hero.name }}">
+          </div>
+          <div class="message-body">
+            {{ range split $site.message.body "\n\n" }}
+            <p>{{ . }}</p>
+            {{ end }}
+          </div>
         </div>
       </div>
     </section>
@@ -102,8 +135,8 @@
         <h2>{{ $site.support.heading }}</h2>
         <p>{{ $site.support.body }}</p>
         <div class="support-cta">
-          <a class="btn btn-primary" href="#contact">{{ $site.support.volunteer_label }}</a>
-          <a class="btn btn-secondary" href="#contact">{{ $site.support.donate_label }}</a>
+          <a class="btn btn-primary" href="#contact-volunteer">{{ $site.support.volunteer_label }}</a>
+          <a class="btn btn-secondary" href="#contact-donate">{{ $site.support.donate_label }}</a>
         </div>
         <div class="sns-links">
           {{ range $site.sns }}
@@ -129,6 +162,8 @@
 
     <section id="contact" class="contact">
       <div class="section-inner narrow">
+        <span id="contact-volunteer" class="anchor-offset"></span>
+        <span id="contact-donate" class="anchor-offset"></span>
         <h2>{{ $site.contact.heading }}</h2>
         <p>{{ $site.contact.body }}</p>
         {{ if $site.contact.form_url }}

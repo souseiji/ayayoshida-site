@@ -1,12 +1,21 @@
 hero:
   name: "吉田 あや"
   name_en: "Aya Yoshida"
-  catch: "誰も、取り残さない。"
+  catch: "誰も、<em>取り残さない。</em>"
   sub: "特別支援教育の現場から、ダウン症のある子を育てる母として。"
   cta_primary: "政策を見る"
   cta_primary_href: "#policies"
   cta_secondary: "応援する"
   cta_secondary_href: "#support"
+  badges:
+    - text: "特別支援学級 補助員"
+      sub: "現場で子どもたちと向き合ってきた実務経験"
+    - text: "ダウン症の子を育てる母"
+      sub: "当事者家族としてのリアルな声"
+    - text: "JETRO ／ 在ロシア日本大使館"
+      sub: "国際舞台での実務経験"
+    - text: "上智大学 外国語学部 卒"
+      sub: "ロシア語専攻"
 
 message:
   heading: "なぜ、私は立つのか"
