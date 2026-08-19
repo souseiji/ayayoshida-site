@@ -1,16 +1,15 @@
-name: Deploy Hugo site
+name: Build and open PR to ayayoshida03.github.io
 
 on:
   push:
     branches: [main]
 
 jobs:
-  build-deploy:
+  build-and-pr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
+      - name: Checkout source
+        uses: actions/checkout@v4
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
@@ -21,11 +20,42 @@ jobs:
       - name: Build
         run: hugo --minify
 
-      - name: Deploy to ayayoshida03.github.io
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Checkout target repo
+        uses: actions/checkout@v4
         with:
-          personal_token: ${{ secrets.DEPLOY_TOKEN }}
-          external_repository: ayayoshida03/ayayoshida03.github.io
-          publish_branch: main
-          publish_dir: ./public
-          cname: ""
+          repository: ayayoshida03/ayayoshida03.github.io
+          token: ${{ secrets.DEPLOY_TOKEN }}
+          path: target
+
+      - name: Sync built site into target repo
+        run: rsync -a --delete --exclude='.git' public/ target/
+
+      - name: Commit and push branch
+        working-directory: target
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B auto-deploy
+          git add -A
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_ENV"
+          else
+            git commit -m "Deploy from ayayoshida-site@${{ github.sha }}"
+            git push -f origin auto-deploy
+            echo "changed=true" >> "$GITHUB_ENV"
+          fi
+
+      - name: Create pull request
+        if: env.changed == 'true'
+        working-directory: target
+        env:
+          GH_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          if gh pr view auto-deploy --repo ayayoshida03/ayayoshida03.github.io >/dev/null 2>&1; then
+            echo "PR already open on auto-deploy branch; pushed new commit to it."
+          else
+            gh pr create --repo ayayoshida03/ayayoshida03.github.io \
+              --head auto-deploy --base main \
+              --title "サイト更新 ($(date +'%Y-%m-%d %H:%M'))" \
+              --body "ayayoshida-site の main ブランチ (${{ github.sha }}) から自動生成されたビルド差分です。"
+          fi

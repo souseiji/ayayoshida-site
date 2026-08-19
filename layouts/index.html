@@ -22,6 +22,17 @@
 <body>
   {{ $site := hugo.Data.site }}
 
+  <div id="auth-gate" class="auth-gate">
+    <form id="auth-form" class="auth-form">
+      <p class="auth-title">準備中サイト</p>
+      <p class="auth-note">関係者以外の閲覧はご遠慮ください</p>
+      <input type="text" id="auth-user" placeholder="ユーザー名" autocomplete="username">
+      <input type="password" id="auth-pass" placeholder="パスワード" autocomplete="current-password">
+      <button type="submit" class="btn btn-primary">入る</button>
+      <p id="auth-error" class="auth-error"></p>
+    </form>
+  </div>
+
   <header class="nav" id="site-nav">
     <div class="nav-inner">
       <a class="nav-brand" href="#top">吉田あや公式サイト</a>
@@ -88,7 +99,8 @@
         <h2>政策</h2>
         <div class="policy-grid">
           {{ range hugo.Data.policies }}
-          <div class="policy-card">
+          <div class="policy-card{{ if .featured }} policy-card-featured{{ end }}">
+            {{ if .featured }}<span class="policy-badge">最重点政策</span>{{ end }}
             <div class="policy-icon">{{ partial "policy-icon.html" .icon }}</div>
             <h3>{{ .title }}</h3>
             <p class="policy-summary">{{ .summary }}</p>
