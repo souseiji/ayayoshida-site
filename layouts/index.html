@@ -22,9 +22,9 @@
 <body>
   {{ $site := hugo.Data.site }}
 
-  <header class="nav">
+  <header class="nav" id="site-nav">
     <div class="nav-inner">
-      <a class="nav-brand" href="#top">{{ $site.hero.name }}</a>
+      <a class="nav-brand" href="#top">吉田あや公式サイト</a>
       <nav class="nav-links">
         <a href="#message">想い</a>
         <a href="#policies">政策</a>
@@ -89,7 +89,7 @@
         <div class="policy-grid">
           {{ range hugo.Data.policies }}
           <div class="policy-card">
-            <div class="policy-icon">{{ .icon }}</div>
+            <div class="policy-icon">{{ partial "policy-icon.html" .icon }}</div>
             <h3>{{ .title }}</h3>
             <p class="policy-summary">{{ .summary }}</p>
             <p class="policy-story">{{ .story }}</p>
@@ -110,6 +110,27 @@
           </li>
           {{ end }}
         </ul>
+      </div>
+    </section>
+
+    <section id="videos" class="videos">
+      <div class="section-inner">
+        <h2>動画</h2>
+        <div class="video-grid">
+          {{ $channel := hugo.Data.videos.channel_url }}
+          {{ range hugo.Data.videos.items }}
+          <a class="video-card" href="https://www.youtube.com/watch?v={{ .id }}" target="_blank" rel="noopener">
+            <div class="video-thumb">
+              <img src="https://i.ytimg.com/vi/{{ .id }}/hqdefault.jpg" alt="{{ .title }}" loading="lazy">
+              <span class="video-play">▶</span>
+            </div>
+            <p class="video-title">{{ .title }}</p>
+          </a>
+          {{ end }}
+        </div>
+        <div class="video-more">
+          <a class="btn btn-secondary-alt" href="{{ $channel }}" target="_blank" rel="noopener">チャンネルをもっと見る</a>
+        </div>
       </div>
     </section>
 
@@ -176,6 +197,17 @@
   </main>
 
   <footer class="site-footer">
+    <nav class="footer-links">
+      <a href="#top">吉田あや</a>
+      <a href="#message">想い</a>
+      <a href="#policies">政策</a>
+      <a href="#profile">プロフィール</a>
+      <a href="#videos">動画</a>
+      <a href="#news">活動報告</a>
+      <a href="#support">応援する</a>
+      <a href="#faq">よくある質問</a>
+      <a href="#contact">お問い合わせ</a>
+    </nav>
     <p>{{ $site.footer.publisher }}</p>
     <p class="footer-note">{{ $site.footer.note }}</p>
   </footer>
