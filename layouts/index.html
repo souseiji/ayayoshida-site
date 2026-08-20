@@ -13,12 +13,12 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="{{ .Site.Title }}">
   <meta property="og:description" content="{{ .Site.Params.description }}">
-  <meta property="og:image" content="{{ "images/hero-banner.jpg" | absURL }}">
+  <meta property="og:image" content="{{ "images/hero-portrait.jpg" | absURL }}">
   <meta property="og:url" content="{{ .Permalink }}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ .Site.Title }}">
   <meta name="twitter:description" content="{{ .Site.Params.description }}">
-  <meta name="twitter:image" content="{{ "images/hero-banner.jpg" | absURL }}">
+  <meta name="twitter:image" content="{{ "images/hero-portrait.jpg" | absURL }}">
 </head>
 <body>
   {{ $site := hugo.Data.site }}
@@ -53,7 +53,7 @@
     <section class="hero">
       <div class="hero-viewport">
         <div class="hero-bg">
-          <img src="{{ "images/hero-banner.jpg" | relURL }}" alt="{{ $site.hero.name }}">
+          <img src="{{ "images/hero-portrait.jpg" | relURL }}" alt="{{ $site.hero.name }}">
         </div>
         <div class="hero-overlay">
           <h1 class="hero-wordmark">
