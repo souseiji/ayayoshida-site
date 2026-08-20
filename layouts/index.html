@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ .Site.Title }}</title>
   <meta name="description" content="{{ .Site.Params.description }}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap">
   <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
   <link rel="icon" href="{{ "favicon.ico" | relURL }}">
   <link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}">
@@ -35,7 +36,7 @@
 
   <header class="nav" id="site-nav">
     <div class="nav-inner">
-      <a class="nav-brand" href="#top">吉田あや公式サイト</a>
+      <a class="nav-brand" href="#top">吉田あや</a>
       <nav class="nav-links">
         <a href="#message">想い</a>
         <a href="#policies">政策</a>
@@ -54,10 +55,13 @@
         <div class="hero-bg">
           <img src="{{ "images/hero-banner.jpg" | relURL }}" alt="{{ $site.hero.name }}">
         </div>
-        <div class="hero-inner">
+        <div class="hero-overlay">
+          <h1 class="hero-wordmark">
+            {{ range split $site.hero.name " " }}{{ . }}<br>{{ end }}
+          </h1>
           <div class="hero-text">
             <p class="hero-name_en">{{ $site.hero.name_en }}</p>
-            <h1 class="hero-catch">{{ $site.hero.catch | safeHTML }}</h1>
+            <h2 class="hero-catch">{{ $site.hero.catch | safeHTML }}</h2>
             <p class="hero-sub">{{ $site.hero.sub }}</p>
             <div class="hero-cta">
               <a class="btn btn-primary" href="{{ $site.hero.cta_primary_href }}">{{ $site.hero.cta_primary }}</a>
@@ -70,8 +74,11 @@
         <div class="badge-strip-inner">
           {{ range $site.hero.badges }}
           <div class="badge">
-            <p class="badge-text">{{ .text }}</p>
-            <p class="badge-sub">{{ .sub }}</p>
+            <div class="badge-icon">{{ partial "policy-icon.html" .icon }}</div>
+            <div>
+              <p class="badge-text">{{ .text }}</p>
+              <p class="badge-sub">{{ .sub }}</p>
+            </div>
           </div>
           {{ end }}
         </div>
@@ -80,12 +87,16 @@
 
     <section id="message" class="message">
       <div class="section-inner">
-        <h2>{{ $site.message.heading }}</h2>
         <div class="message-layout">
-          <div class="message-photo">
-            <img src="{{ "images/message-portrait.jpg" | relURL }}" alt="{{ $site.hero.name }}">
+          <div class="message-heading">
+            <span class="eyebrow">MESSAGE</span>
+            <h2>{{ $site.message.heading }}</h2>
           </div>
           <div class="message-body">
+            <div class="message-photo">
+              <img src="{{ "images/message-portrait.jpg" | relURL }}" alt="{{ $site.hero.name }}">
+            </div>
+            <p class="message-lead">{{ $site.message.lead }}</p>
             {{ range split $site.message.body "\n\n" }}
             <p>{{ . }}</p>
             {{ end }}
@@ -96,15 +107,17 @@
 
     <section id="policies" class="policies">
       <div class="section-inner">
+        <span class="eyebrow">POLICY</span>
         <h2>政策</h2>
-        <div class="policy-grid">
+        <div class="policy-list">
           {{ range hugo.Data.policies }}
-          <div class="policy-card{{ if .featured }} policy-card-featured{{ end }}">
+          <div class="policy-row{{ if .featured }} policy-row-featured{{ end }}">
+            <span class="policy-quote">&ldquo;</span>
+            <div class="policy-row-body">
+              <h3>{{ .story }}</h3>
+              <p>{{ .summary }}</p>
+            </div>
             {{ if .featured }}<span class="policy-badge">最重点政策</span>{{ end }}
-            <div class="policy-icon">{{ partial "policy-icon.html" .icon }}</div>
-            <h3>{{ .title }}</h3>
-            <p class="policy-summary">{{ .summary }}</p>
-            <p class="policy-story">{{ .story }}</p>
           </div>
           {{ end }}
         </div>
@@ -113,6 +126,7 @@
 
     <section id="profile" class="profile">
       <div class="section-inner narrow">
+        <span class="eyebrow">PROFILE</span>
         <h2>プロフィール</h2>
         <ul class="timeline">
           {{ range $site.profile }}
@@ -127,6 +141,7 @@
 
     <section id="videos" class="videos">
       <div class="section-inner">
+        <span class="eyebrow">VIDEO</span>
         <h2>動画</h2>
         <div class="video-grid">
           {{ $channel := hugo.Data.videos.channel_url }}
@@ -148,23 +163,27 @@
 
     <section id="news" class="news">
       <div class="section-inner narrow">
+        <span class="eyebrow">NEWS</span>
         <h2>活動報告</h2>
-        <ul class="news-list">
-          {{ range hugo.Data.news }}
-          <li class="news-item">
-            <time class="news-date">{{ .date }}</time>
-            <div class="news-body">
-              <h3>{{ .title }}</h3>
-              <p>{{ .body }}</p>
-            </div>
-          </li>
-          {{ end }}
-        </ul>
+        <div class="news-card">
+          <ul class="news-list">
+            {{ range hugo.Data.news }}
+            <li class="news-item">
+              <time class="news-date">{{ .date }}</time>
+              <div class="news-body">
+                <h3>{{ .title }}</h3>
+                <p>{{ .body }}</p>
+              </div>
+            </li>
+            {{ end }}
+          </ul>
+        </div>
       </div>
     </section>
 
     <section id="support" class="support">
       <div class="section-inner narrow">
+        <span class="eyebrow eyebrow-on-dark">SUPPORT</span>
         <h2>{{ $site.support.heading }}</h2>
         <p>{{ $site.support.body }}</p>
         <div class="support-cta">
@@ -181,6 +200,7 @@
 
     <section id="faq" class="faq">
       <div class="section-inner narrow">
+        <span class="eyebrow">FAQ</span>
         <h2>よくある質問</h2>
         <div class="faq-list">
           {{ range hugo.Data.faq }}
@@ -197,6 +217,7 @@
       <div class="section-inner narrow">
         <span id="contact-volunteer" class="anchor-offset"></span>
         <span id="contact-donate" class="anchor-offset"></span>
+        <span class="eyebrow">CONTACT</span>
         <h2>{{ $site.contact.heading }}</h2>
         <p>{{ $site.contact.body }}</p>
         {{ if $site.contact.form_url }}
